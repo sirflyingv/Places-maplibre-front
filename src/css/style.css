@@ -3,8 +3,22 @@ body {
   padding: 0;
 }
 #map {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   width: 100%;
+}
+
+/* if select as class - z index do not help. Review info on style priority */
+#menu {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  background-color: rgb(255, 254, 254);
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px rgb(139, 139, 139, 0.2);
+  width: 150px;
+  height: 100px;
+  padding: 10px;
 }

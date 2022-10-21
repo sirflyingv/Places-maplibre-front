@@ -1,6 +1,6 @@
 import maplibreGl from 'maplibre-gl';
 
-export const map = new maplibreGl.Map({
+export default new maplibreGl.Map({
   container: 'map', // container id
   style: {
     version: 8,
@@ -23,6 +23,6 @@ export const map = new maplibreGl.Map({
       },
     ],
   },
-  center: [-74.5, 40], // starting position
-  zoom: 2, // starting zoom
+  center: [-71.4225818, -32.4129609], // starting position
+  zoom: 10, // starting zoom
 });
