@@ -3,11 +3,16 @@ import { API_URL } from './config';
 import { bbox } from '@turf/turf';
 import { multiPoint } from '@turf/helpers';
 
-const markers = [];
-const loadedPlaces = [];
+export const state = {
+  markers: [],
+  loadedPlaces: [],
+  showNames() {
+    return this.loadedPlaces.map((place) => place.name).join(',');
+  },
+};
 
 export const saveMarker = function (m) {
-  markers.push(m);
+  state.markers.push(m);
 };
 
 export const loadPlaces = async function (queryWords) {
@@ -25,13 +30,14 @@ export const loadPlaces = async function (queryWords) {
   const places = [
     ...new Map(combinedResult.map((place) => [place._id, place])).values(),
   ];
-  loadedPlaces.push(...places);
-  console.log('loadedPlaces: ', loadedPlaces);
+  state.loadedPlaces.push(...places);
   return places;
 };
 
-export const clearMarkers = function () {
-  markers.forEach((marker) => marker.remove());
+export const clearLoadedPlaces = function () {
+  state.markers.forEach((marker) => marker.remove());
+  state.markers = [];
+  state.loadedPlaces = [];
 };
 
 export const getPlacesBbox = function (places) {

@@ -18,7 +18,7 @@ class MockMenuView {
     });
   }
 
-  getQuery() {
+  getSearchInput() {
     const query = this._parentElement.querySelector('.input__query').value;
     this._clearInput();
     return query;

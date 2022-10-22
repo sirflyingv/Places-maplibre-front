@@ -2,10 +2,17 @@ import maplibreGl from 'maplibre-gl';
 // import { AJAX, timeout } from './helpers';
 import mapView from './views/mapView';
 import mockMenuView from './views/mockMenuView';
-import { saveMarker, loadPlaces, clearMarkers, getPlacesBbox } from './model';
+import {
+  state,
+  saveMarker,
+  loadPlaces,
+  clearLoadedPlaces,
+  getPlacesBbox,
+} from './model';
 // import { API_URL } from './config';
 
 const map = mapView;
+window.history.replaceState('', null, '');
 
 const addMarker = function (place) {
   const marker = new maplibreGl.Marker()
@@ -15,24 +22,59 @@ const addMarker = function (place) {
   saveMarker(marker);
 };
 
-const removeBtnDummyHandler = function () {
-  console.log('Remove button clicked');
+const removeBtnHandler = function () {
+  clearLoadedPlaces();
+  console.log(state);
+  window.history.replaceState('', null, '/'); // '/' - removes old shit
 };
 
-const drawFoundPlaces = async function () {
-  const queryString = mockMenuView.getQuery();
-  if (queryString.length < 3) return;
-  clearMarkers();
-  const places = await loadPlaces(queryString);
-  // console.log(places);
-  places.forEach((place) => addMarker(place));
+const findAndShowPlaces = async function (query) {
+  let queryString;
+  if (!query) queryString = mockMenuView.getSearchInput();
+  if (query) queryString = query;
 
-  map.fitBounds(getPlacesBbox(places), {
+  if (queryString.length < 3) return;
+  clearLoadedPlaces();
+
+  await loadPlaces(queryString);
+  renderState();
+
+  // putting search queries to History API
+  window.history.pushState(queryString, null, queryString);
+};
+
+const renderState = function () {
+  state.loadedPlaces.forEach((place) => addMarker(place));
+  map.fitBounds(getPlacesBbox(state.loadedPlaces), {
     padding: 100,
     maxZoom: 14,
     // linear: true,
   });
 };
 
-mockMenuView.addHandlerButtonLoad(drawFoundPlaces);
-mockMenuView.addHandlerButtonRemove(removeBtnDummyHandler);
+// WEIRD SHIT FOR KEEPING SEARCH QUERY FOR BACK AND COPIED URL
+window.onpopstate = async function (event) {
+  let oldQuery;
+  if (event.state) {
+    oldQuery = event.state;
+  }
+
+  findAndShowPlaces(oldQuery);
+  console.log(window.location.href);
+  console.log(state);
+  // render(state); // See example render function in summary below
+};
+
+window.addEventListener('load', function (event) {
+  const urlEnd = String(window.location.href.split('/').slice(-1));
+  findAndShowPlaces(urlEnd);
+});
+
+// window.addEventListener('refresh', function (event) {
+//   const urlEnd = String(window.location.href.split('/').slice(-1));
+//   findAndShowPlaces(urlEnd);
+// });
+//
+
+mockMenuView.addHandlerButtonLoad(findAndShowPlaces);
+mockMenuView.addHandlerButtonRemove(removeBtnHandler);

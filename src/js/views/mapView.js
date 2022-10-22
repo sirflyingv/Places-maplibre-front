@@ -23,6 +23,7 @@ export default new maplibreGl.Map({
       },
     ],
   },
-  center: [-71.4225818, -32.4129609], // starting position
-  zoom: 10, // starting zoom
+  // center: [-71.4225818, -32.4129609],
+  center: [0, 0], // starting position
+  zoom: 2, // starting zoom
 });
