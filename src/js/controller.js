@@ -1,19 +1,15 @@
 import maplibreGl from 'maplibre-gl';
-import { AJAX, timeout } from './helpers';
+// import { AJAX, timeout } from './helpers';
 import mapView from './views/mapView';
 import mockMenuView from './views/mockMenuView';
-import { saveMarker, getMarkers } from './model';
-import { API_URL } from './config';
+import { saveMarker, loadPlaces, clearMarkers, getPlacesBbox } from './model';
+// import { API_URL } from './config';
 
 const map = mapView;
 
-const addMarker = async function (id) {
-  const { data } = await AJAX(
-    `${API_URL}/api/v1/places/634ac66d7d66094d4011abd8`,
-    'GET'
-  );
+const addMarker = function (place) {
   const marker = new maplibreGl.Marker()
-    .setLngLat(data.location.coordinates)
+    .setLngLat(place.location.coordinates)
     .addTo(map);
 
   saveMarker(marker);
@@ -23,27 +19,20 @@ const removeBtnDummyHandler = function () {
   console.log('Remove button clicked');
 };
 
-const loadQuery = async function () {
+const drawFoundPlaces = async function () {
   const queryString = mockMenuView.getQuery();
   if (queryString.length < 3) return;
-  const resTags = await AJAX(
-    `${API_URL}/api/v1/places/search?tags=${queryString}`
-  );
-  const resName = await AJAX(
-    `${API_URL}/api/v1/places/search?inname=${queryString}`
-  );
-  const resDesc = await AJAX(
-    `${API_URL}/api/v1/places/search?indesc=${queryString}`
-  );
-  const combinedResult = [...resTags.data, ...resName.data, ...resDesc.data];
+  clearMarkers();
+  const places = await loadPlaces(queryString);
+  // console.log(places);
+  places.forEach((place) => addMarker(place));
 
-  const resultUniq = [
-    ...new Map(combinedResult.map((place) => [place._id, place])).values(),
-  ];
-
-  console.log(resultUniq);
-  return resultUniq;
+  map.fitBounds(getPlacesBbox(places), {
+    padding: 100,
+    maxZoom: 14,
+    // linear: true,
+  });
 };
 
-mockMenuView.addHandlerButtonLoad(loadQuery);
+mockMenuView.addHandlerButtonLoad(drawFoundPlaces);
 mockMenuView.addHandlerButtonRemove(removeBtnDummyHandler);
