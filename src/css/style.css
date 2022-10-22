@@ -22,3 +22,8 @@ body {
   height: 100px;
   padding: 10px;
 }
+
+.input__query {
+  margin-top: 5px;
+  width: 140px;
+}
