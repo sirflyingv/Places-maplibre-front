@@ -12,7 +12,6 @@ import {
 // import { API_URL } from './config';
 
 const map = mapView;
-window.history.replaceState('', null, '');
 
 const addMarker = function (place) {
   const marker = new maplibreGl.Marker()
@@ -62,19 +61,12 @@ window.onpopstate = async function (event) {
   findAndShowPlaces(oldQuery);
   console.log(window.location.href);
   console.log(state);
-  // render(state); // See example render function in summary below
 };
 
 window.addEventListener('load', function (event) {
   const urlEnd = String(window.location.href.split('/').slice(-1));
   findAndShowPlaces(urlEnd);
 });
-
-// window.addEventListener('refresh', function (event) {
-//   const urlEnd = String(window.location.href.split('/').slice(-1));
-//   findAndShowPlaces(urlEnd);
-// });
-//
 
 mockMenuView.addHandlerButtonLoad(findAndShowPlaces);
 mockMenuView.addHandlerButtonRemove(removeBtnHandler);
