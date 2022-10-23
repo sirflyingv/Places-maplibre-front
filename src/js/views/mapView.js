@@ -1,13 +1,16 @@
 import maplibreGl from 'maplibre-gl';
+import { getViewCenterString } from '../controller';
 
 const urlEnd = String(window.location.href.split('/').slice(-1));
-const [searchString, coods] = urlEnd.split('&');
+const [searchString, coords] = urlEnd.split('&');
 
-const [urlLng, urlLat, urlZoom] = coods.split(',');
+const [urlLng, urlLat, urlZoom] = coords
+  ? coords.split(',')
+  : [null, null, null];
 
 const startView = {
-  center: [urlLng ? +urlLng : 0, +urlLat ? urlLat : 0],
-  zoom: urlZoom ? urlZoom : 4,
+  center: [urlLng ? +urlLng : 0, +urlLat ? urlLat : 20],
+  zoom: urlZoom ? urlZoom : 2,
 };
 
 export default new maplibreGl.Map({

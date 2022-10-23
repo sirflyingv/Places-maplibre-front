@@ -61,7 +61,7 @@ window.onpopstate = async function (event) {
   if (event.state) {
     oldQuery = event.state;
   }
-  console.log(oldQuery);
+  console.log(oldQuery.split('&'));
 
   findAndShowPlaces(oldQuery);
   console.log(window.location.href);
@@ -72,8 +72,8 @@ window.onpopstate = async function (event) {
 window.addEventListener('load', function () {
   const urlEnd = String(window.location.href.split('/').slice(-1));
   const [searchString, coods] = urlEnd.split('&');
-  console.log(searchString);
-  console.log(coods);
+  // console.log(searchString);
+  // console.log(coods);
 
   findAndShowPlaces(searchString);
 });
