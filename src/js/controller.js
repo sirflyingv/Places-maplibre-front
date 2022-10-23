@@ -60,7 +60,7 @@ window.onpopstate = async function (event) {
 
   findAndShowPlaces(oldQuery);
   console.log(window.location.href);
-  console.log(state);
+  // console.log(state);
 };
 
 window.addEventListener('load', function () {

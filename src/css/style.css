@@ -23,7 +23,19 @@ body {
   padding: 10px;
 }
 
+.btn {
+  width: auto;
+  margin: 2px;
+}
+.menu--container {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
 .input__query {
-  margin-top: 5px;
+  grid-column-start: span 2;
+  margin: 2px;
   width: 140px;
 }
