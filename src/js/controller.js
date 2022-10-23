@@ -63,7 +63,7 @@ window.onpopstate = async function (event) {
   console.log(state);
 };
 
-window.addEventListener('load', function (event) {
+window.addEventListener('load', function () {
   const urlEnd = String(window.location.href.split('/').slice(-1));
   findAndShowPlaces(urlEnd);
 });
