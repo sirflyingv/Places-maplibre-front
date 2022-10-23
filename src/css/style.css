@@ -19,7 +19,7 @@ body {
   border-radius: 10px;
   box-shadow: 5px 5px 5px rgb(139, 139, 139, 0.2);
   width: 150px;
-  height: 100px;
+  height: auto;
   padding: 10px;
 }
 
