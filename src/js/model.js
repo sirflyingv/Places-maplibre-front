@@ -6,6 +6,7 @@ import { multiPoint } from '@turf/helpers';
 export const state = {
   markers: [],
   loadedPlaces: [],
+  viewCenter: '',
   showNames() {
     return this.loadedPlaces.map((place) => place.name).join(',');
   },

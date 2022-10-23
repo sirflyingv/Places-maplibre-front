@@ -1,8 +1,13 @@
 import maplibreGl from 'maplibre-gl';
 
+const urlEnd = String(window.location.href.split('/').slice(-1));
+const [searchString, coods] = urlEnd.split('&');
+
+const [urlLng, urlLat, urlZoom] = coods.split(',');
+
 const startView = {
-  center: [0, 0],
-  zoom: 2,
+  center: [urlLng ? +urlLng : 0, +urlLat ? urlLat : 0],
+  zoom: urlZoom ? urlZoom : 4,
 };
 
 export default new maplibreGl.Map({
