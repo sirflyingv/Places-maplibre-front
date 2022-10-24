@@ -2,6 +2,15 @@ class MockMenuView {
   _parentElement = document.getElementById('menu');
   //   btn = this._element.querySelector('.btn-load');
 
+  // test
+  // addHoverHandler() {
+  //   this._parentElement.addEventListener('mouseover', function (e) {
+  //     const btn = e.target.closest('.btn--load');
+  //     if (!btn) return;
+  //     console.log('Load hovering');
+  //   });
+  // }
+
   addHandlerButtonLoad(handler) {
     this._parentElement.addEventListener('click', function (e) {
       const btn = e.target.closest('.btn--load');
@@ -19,13 +28,15 @@ class MockMenuView {
   }
 
   getSearchInput() {
-    const query = this._parentElement.querySelector('.input__query').value;
+    const query = this._parentElement.querySelector(
+      '.input__global-query'
+    ).value;
     this._clearInput();
     return query;
   }
 
   _clearInput() {
-    this._parentElement.querySelector('.input__query').value = '';
+    this._parentElement.querySelector('.input__global-query').value = '';
   }
 }
 

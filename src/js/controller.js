@@ -30,10 +30,12 @@ const removeBtnHandler = function () {
 
 const findAndShowPlaces = async function (query) {
   // querying places and getting cleanQueryString
+
   const cleanQueryString = await getQueryAndLoadPlaces(query);
+  if (!cleanQueryString) return;
+
   renderMarkers();
   fitViewtoMarkers();
-
   const [searchString, mapViewString] = window.location.hash.split('&');
   window.location.hash = `${cleanQueryString}&${mapViewString}`;
 };
@@ -41,11 +43,9 @@ const findAndShowPlaces = async function (query) {
 const getQueryAndLoadPlaces = async function (query) {
   const queryString = query ? query : mockMenuView.getSearchInput();
   if (queryString.length < 3) return;
-
   // clean query TO DO - BETTER CLEANING
   const cleanQueryString = searchStringCleaner(queryString);
 
-  console.log(cleanQueryString);
   clearLoadedPlaces(); // model.state updated
   await loadPlaces(cleanQueryString); // model.state updated
   return cleanQueryString;
@@ -65,17 +65,18 @@ const fitViewtoMarkers = function () {
   });
 };
 
-const centerMapViewTo = function (viewCenterString) {
-  const [lng, lat, zoom] = viewCenterString.split(',');
-  map.setCenter([lng, lat]).setZoom(zoom);
-};
+// unused for now
+// const centerMapViewTo = function (viewCenterString) {
+//   const [lng, lat, zoom] = viewCenterString.split(',');
+//   map.setCenter([lng, lat]).setZoom(zoom);
+// };
 
 map.on('moveend', function () {
   const viewCenterString = getViewCenterString();
 
   const [searchString, oldMapViewString] = window.location.hash.split('&');
   window.location.hash = `${searchString}&${viewCenterString}`;
-  console.log(state);
+  // console.log(state);
 });
 
 map.on('load', async function () {
@@ -96,3 +97,6 @@ const getViewCenterString = function () {
 
 mockMenuView.addHandlerButtonLoad(findAndShowPlaces);
 mockMenuView.addHandlerButtonRemove(removeBtnHandler);
+
+// test
+// mockMenuView.addHoverHandler();

@@ -20,13 +20,26 @@ body {
   box-shadow: 5px 5px 5px rgb(139, 139, 139, 0.2);
   width: 150px;
   height: auto;
-  padding: 10px;
+  padding: 5px;
 }
 
 .btn {
   width: auto;
   margin: 2px;
+  border-radius: 5px;
+  border: 0;
+  background-color: rgb(230, 230, 230);
+  color: rgb(59, 59, 59);
 }
+
+.btn:hover {
+  background-color: rgb(219, 219, 219);
+}
+
+.btn:active {
+  background-color: rgb(196, 196, 196);
+}
+
 .menu--container {
   display: grid;
   justify-content: center;
@@ -34,8 +47,18 @@ body {
   grid-template-rows: repeat(2, 1fr);
 }
 
-.input__query {
+.input__global-query {
   grid-column-start: span 2;
+  padding: 3px;
   margin: 2px;
-  width: 140px;
+  width: auto;
+  border-radius: 5px;
+  border: 0;
+  background-color: rgb(230, 230, 230);
+}
+
+.input__global-query:focus {
+  outline: none;
+  background-color: rgb(206, 206, 206);
+  color: rgb(59, 59, 59);
 }
