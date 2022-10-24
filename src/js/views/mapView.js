@@ -1,6 +1,6 @@
 import maplibreGl from 'maplibre-gl';
 
-const [searchString, coords] = window.location.pathname.split('&');
+const [searchString, coords] = window.location.hash.split('&');
 
 const [urlLng, urlLat, urlZoom] = coords
   ? coords.split(',')
@@ -10,6 +10,11 @@ const startView = {
   center: [urlLng ? +urlLng : 0, +urlLat ? urlLat : 20],
   zoom: urlZoom ? urlZoom : 2,
 };
+
+// const startView = {
+//   center: [0, 0],
+//   zoom: 0,
+// };
 
 export default new maplibreGl.Map({
   container: 'map', // container id
