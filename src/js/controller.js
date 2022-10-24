@@ -22,9 +22,13 @@ const addMarker = function (place) {
 };
 
 const removeBtnHandler = function () {
-  clearLoadedPlaces();
-  console.log(state);
-  window.history.replaceState('', null, `&${getViewCenterString()}`); // '/' - removes old shit
+  clearLoadedPlaces(); // model.state updated
+
+  const [searchStringtoDelete, mapViewString] =
+    window.location.pathname.split('&');
+  const cleanedPathname = `_&${mapViewString}`;
+
+  window.history.pushState(cleanedPathname, null, cleanedPathname);
 };
 
 const findAndShowPlaces = async function (query) {
@@ -35,15 +39,21 @@ const findAndShowPlaces = async function (query) {
   if (queryString.length < 3) return;
   clearLoadedPlaces();
 
-  await loadPlaces(queryString);
-  renderState();
+  await loadPlaces(queryString); // model.state updated
+  renderState(); // model.state updated
 
   // putting search queries to History API
+  const [searchString, mapViewString] = window.location.pathname.split('&');
+  // console.log(searchString, '<>', mapViewString);
+  const newSearchString = queryString;
+  // console.log(searchString);
+
   window.history.pushState(
-    queryString + `&${getViewCenterString()}`,
+    `${newSearchString}&${mapViewString}`,
     null,
-    queryString + `&${getViewCenterString()}`
+    `${newSearchString}&${mapViewString}`
   );
+  // console.log(window.history.state);
 };
 
 const renderState = function () {
@@ -57,34 +67,43 @@ const renderState = function () {
 
 // WEIRD SHIT FOR KEEPING SEARCH QUERY FOR BACK AND COPIED URL
 window.onpopstate = async function (event) {
-  let oldQuery;
+  let prevStateString;
   if (event.state) {
-    oldQuery = event.state;
+    prevStateString = event.state;
   }
-  console.log(oldQuery.split('&'));
 
-  findAndShowPlaces(oldQuery);
-  console.log(window.location.href);
-  // console.log(state);
-};
-
-//  TO DO: get center from url
-window.addEventListener('load', function () {
-  const urlEnd = String(window.location.href.split('/').slice(-1));
-  const [searchString, coods] = urlEnd.split('&');
-  // console.log(searchString);
-  // console.log(coods);
-
+  // console.log('IM BACK', prevStateString);
+  const [searchString, mapViewString] = prevStateString.split('&');
+  // console.log('SEARCH', searchString, 'COORDS', mapViewString);
   findAndShowPlaces(searchString);
-});
+  // console.log(window.history.state);
+};
 
 map.on('moveend', function () {
   const viewCenterString = getViewCenterString();
 
-  const urlEnd = String(window.location.href.split('/').slice(-1));
-  const [searchString, oldCenterString] = urlEnd.split('&');
+  const curWindowHistoryState = window.history.state;
+  // console.log('history state before updating', curWindowHistoryState);
+  const [searchString, oldMapViewString] = curWindowHistoryState.split('&');
+  const newPathname = `${searchString}&${viewCenterString}`;
+  // console.log('wanna update to this ', newPathname);
 
-  window.history.pushState(urlEnd, null, searchString + `&${viewCenterString}`);
+  window.history.pushState(newPathname, null, newPathname);
+  state.setMapViewState();
+  // console.log(window.history.state);
+});
+
+//  TO DO: get center from url
+window.addEventListener('load', function () {
+  window.history.pushState(
+    window.location.pathname,
+    null,
+    window.location.pathname
+  );
+
+  const [searchString, _MapViewString] = window.location.pathname.split('&');
+  const preparedSearchString = searchString.replace('/', '');
+  findAndShowPlaces(preparedSearchString);
 });
 
 // Just helper function
