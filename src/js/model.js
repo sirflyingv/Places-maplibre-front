@@ -6,29 +6,27 @@ import { multiPoint } from '@turf/helpers';
 export const state = {
   markers: [],
   loadedPlaces: [],
-  viewCenter: '',
-  mapViewState: {
-    searchString: '',
-    lat: '',
-    lng: '',
-    zoom: 0,
-  },
-  setMapViewState() {
-    const [searchString, viewCenterString] =
-      window.location.pathname.split('&');
+  // mapViewState: {
+  //   searchString: '',
+  //   lat: '',
+  //   lng: '',
+  //   zoom: 0,
+  // },
+  // setMapViewState() {
+  //   const [searchString, viewCenterString] = window.location.hash.split('&');
 
-    const [lat, lng, zoom] = viewCenterString
-      ? viewCenterString.split(',')
-      : [null, null, null];
+  //   const [lat, lng, zoom] = viewCenterString
+  //     ? viewCenterString.split(',')
+  //     : [null, null, null];
 
-    this.mapViewState.searchString = searchString;
-    this.mapViewState.lat = lat ? lat : 0;
-    this.mapViewState.lng = lng ? lng : 0;
-    this.mapViewState.zoom = zoom ? +zoom : 0;
-  },
-  showNames() {
-    return this.loadedPlaces.map((place) => place.name).join(',');
-  },
+  //   this.mapViewState.searchString = searchString;
+  //   this.mapViewState.lat = lat ? lat : 0;
+  //   this.mapViewState.lng = lng ? lng : 0;
+  //   this.mapViewState.zoom = zoom ? +zoom : 0;
+  // },
+  // showNames() {
+  //   return this.loadedPlaces.map((place) => place.name).join(',');
+  // },
 };
 
 export const saveMarker = function (m) {

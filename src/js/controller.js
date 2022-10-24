@@ -29,6 +29,16 @@ const removeBtnHandler = function () {
 };
 
 const findAndShowPlaces = async function (query) {
+  // querying places and getting cleanQueryString
+  const cleanQueryString = await getQueryAndLoadPlaces(query);
+  renderMarkers();
+  fitViewtoMarkers();
+
+  const [searchString, mapViewString] = window.location.hash.split('&');
+  window.location.hash = `${cleanQueryString}&${mapViewString}`;
+};
+
+const getQueryAndLoadPlaces = async function (query) {
   const queryString = query ? query : mockMenuView.getSearchInput();
   if (queryString.length < 3) return;
 
@@ -38,16 +48,16 @@ const findAndShowPlaces = async function (query) {
   console.log(cleanQueryString);
   clearLoadedPlaces(); // model.state updated
   await loadPlaces(cleanQueryString); // model.state updated
-  renderState(); // model.state updated
-
-  const [searchString, mapViewString] = window.location.hash.split('&');
-  window.location.hash = `${cleanQueryString}&${mapViewString}`;
+  return cleanQueryString;
 };
 
-const renderState = function () {
+const renderMarkers = function () {
   if (state.loadedPlaces.length === 0) return;
-
   state.loadedPlaces.forEach((place) => addMarker(place));
+};
+
+const fitViewtoMarkers = function () {
+  if (state.loadedPlaces.length === 0) return;
   map.fitBounds(getPlacesBbox(state.loadedPlaces), {
     padding: 100,
     maxZoom: 14,
@@ -55,25 +65,25 @@ const renderState = function () {
   });
 };
 
+const centerMapViewTo = function (viewCenterString) {
+  const [lng, lat, zoom] = viewCenterString.split(',');
+  map.setCenter([lng, lat]).setZoom(zoom);
+};
+
 map.on('moveend', function () {
   const viewCenterString = getViewCenterString();
 
   const [searchString, oldMapViewString] = window.location.hash.split('&');
   window.location.hash = `${searchString}&${viewCenterString}`;
+  console.log(state);
 });
 
-// window.addEventListener('load', function () {
-//   const [searchString, oldMapViewString] = window.location.hash.split('&');
-//   const cleanSearchString = cleanSearchString(searchString);
-
-//   findAndShowPlaces(cleanSearchString);
-// });
-
-map.on('load', function () {
+map.on('load', async function () {
   const [searchString, oldMapViewString] = window.location.hash.split('&');
   const cleanSearchString = searchStringCleaner(searchString);
 
-  findAndShowPlaces(cleanSearchString);
+  await getQueryAndLoadPlaces(cleanSearchString);
+  renderMarkers();
 });
 
 // Just helper function
