@@ -32,8 +32,12 @@ const findAndShowPlaces = async function (query) {
   const queryString = query ? query : mockMenuView.getSearchInput();
   if (queryString.length < 3) return;
 
+  // clean query
+  const cleanQueryString = queryString.replace(/[# ]/gi, '');
+
+  console.log(cleanQueryString);
   clearLoadedPlaces(); // model.state updated
-  await loadPlaces(queryString); // model.state updated
+  await loadPlaces(cleanQueryString); // model.state updated
   renderState(); // model.state updated
 
   const [searchString, mapViewString] = window.location.hash.split('&');
