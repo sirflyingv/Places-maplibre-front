@@ -32,7 +32,7 @@ const findAndShowPlaces = async function (query) {
   const queryString = query ? query : mockMenuView.getSearchInput();
   if (queryString.length < 3) return;
 
-  // clean query
+  // clean query TO DO - BETTER CLEANING
   const cleanQueryString = queryString.replace(/[# ]/gi, '');
 
   console.log(cleanQueryString);
@@ -59,8 +59,7 @@ map.on('moveend', function () {
   const viewCenterString = getViewCenterString();
 
   const [searchString, oldMapViewString] = window.location.hash.split('&');
-  const newHash = `${searchString}&${viewCenterString}`;
-  window.location.hash = newHash;
+  window.location.hash = `${searchString}&${viewCenterString}`;
 });
 
 window.addEventListener('load', function () {
