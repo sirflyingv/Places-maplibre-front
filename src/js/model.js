@@ -50,7 +50,7 @@ export const loadPlaces = async function (queryWords) {
   const places = [
     ...new Map(combinedResult.map((place) => [place._id, place])).values(),
   ];
-
+  if (!places) return;
   state.loadedPlaces.push(...places);
   return places;
 };
@@ -62,6 +62,8 @@ export const clearLoadedPlaces = function () {
 };
 
 export const getPlacesBbox = function (places) {
+  if (places.length === 0) return;
+
   const coordsArray = places.map((place) => place.location.coordinates);
   return bbox(multiPoint(coordsArray));
 };
