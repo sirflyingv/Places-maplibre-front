@@ -33,3 +33,7 @@ export const AJAX = async function (
     throw err;
   }
 };
+
+export const searchStringCleaner = function (string) {
+  return string.replace(/[# ]/g, '');
+};

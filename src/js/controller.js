@@ -1,5 +1,5 @@
 import maplibreGl, { LngLat } from 'maplibre-gl';
-// import { AJAX, timeout } from './helpers';
+import { searchStringCleaner } from './helpers';
 import mapView from './views/mapView';
 import mockMenuView from './views/mockMenuView';
 import {
@@ -33,7 +33,7 @@ const findAndShowPlaces = async function (query) {
   if (queryString.length < 3) return;
 
   // clean query TO DO - BETTER CLEANING
-  const cleanQueryString = queryString.replace(/[# ]/gi, '');
+  const cleanQueryString = searchStringCleaner(queryString);
 
   console.log(cleanQueryString);
   clearLoadedPlaces(); // model.state updated
@@ -41,7 +41,7 @@ const findAndShowPlaces = async function (query) {
   renderState(); // model.state updated
 
   const [searchString, mapViewString] = window.location.hash.split('&');
-  window.location.hash = `${queryString}&${mapViewString}`;
+  window.location.hash = `${cleanQueryString}&${mapViewString}`;
 };
 
 const renderState = function () {
@@ -62,9 +62,16 @@ map.on('moveend', function () {
   window.location.hash = `${searchString}&${viewCenterString}`;
 });
 
-window.addEventListener('load', function () {
+// window.addEventListener('load', function () {
+//   const [searchString, oldMapViewString] = window.location.hash.split('&');
+//   const cleanSearchString = cleanSearchString(searchString);
+
+//   findAndShowPlaces(cleanSearchString);
+// });
+
+map.on('load', function () {
   const [searchString, oldMapViewString] = window.location.hash.split('&');
-  const cleanSearchString = searchString.replace(/[# ]/g, '');
+  const cleanSearchString = searchStringCleaner(searchString);
 
   findAndShowPlaces(cleanSearchString);
 });
