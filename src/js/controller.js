@@ -24,30 +24,20 @@ const addMarker = function (place) {
 const removeBtnHandler = function () {
   clearLoadedPlaces(); // model.state updated
 
-  const curentHash = window.location.hash;
-  const [searchString, mapViewString] = curentHash.split('&');
-  const newHash = `&${mapViewString}`;
-  window.location.hash = newHash;
+  const [searchString, mapViewString] = window.location.hash.split('&');
+  window.location.hash = `&${mapViewString}`;
 };
 
 const findAndShowPlaces = async function (query) {
-  let queryString;
-  if (!query) queryString = mockMenuView.getSearchInput();
-  if (query) queryString = query;
-
+  const queryString = query ? query : mockMenuView.getSearchInput();
   if (queryString.length < 3) return;
-  clearLoadedPlaces();
 
+  clearLoadedPlaces(); // model.state updated
   await loadPlaces(queryString); // model.state updated
   renderState(); // model.state updated
 
-  // putting search queries to window.location.hash
   const [searchString, mapViewString] = window.location.hash.split('&');
-  // console.log(searchString, '<>', mapViewString);
-  const newSearchString = queryString;
-  // console.log(searchString);
-
-  window.location.hash = `${newSearchString}&${mapViewString}`;
+  window.location.hash = `${queryString}&${mapViewString}`;
 };
 
 const renderState = function () {
@@ -61,38 +51,18 @@ const renderState = function () {
   });
 };
 
-// WEIRD SHIT FOR KEEPING SEARCH QUERY FOR BACK AND COPIED URL
-// window.onpopstate = async function (event) {
-// let prevStateString;
-// if (event.state) {
-//   prevStateString = event.state;
-// }
-
-// console.log('IM BACK', prevStateString);
-// const [searchString, mapViewString] = prevStateString.split('&');
-// console.log('SEARCH', searchString, 'COORDS', mapViewString);
-// findAndShowPlaces(searchString);
-// console.log(window.history.state);
-// };
-
 map.on('moveend', function () {
   const viewCenterString = getViewCenterString();
-  // console.log(viewCenterString);
-  const curentHash = window.location.hash;
-  const [searchString, oldMapViewString] = curentHash.split('&');
-  // console.log(searchString);
-  const newHash = `${searchString}&${viewCenterString}`;
 
+  const [searchString, oldMapViewString] = window.location.hash.split('&');
+  const newHash = `${searchString}&${viewCenterString}`;
   window.location.hash = newHash;
 });
 
-//  TO DO: get center from url
 window.addEventListener('load', function () {
-  console.log('Im loaded');
-
-  const hash = window.location.hash;
-  const [searchString, oldMapViewString] = hash.split('&');
+  const [searchString, oldMapViewString] = window.location.hash.split('&');
   const cleanSearchString = searchString.replace(/[# ]/g, '');
+
   findAndShowPlaces(cleanSearchString);
 });
 
