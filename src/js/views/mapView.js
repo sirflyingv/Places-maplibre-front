@@ -16,12 +16,13 @@ const startView = {
 //   zoom: 0,
 // };
 
-export default new maplibreGl.Map({
+export const map = new maplibreGl.Map({
   container: 'map', // container id
   style: {
     version: 8,
+    // glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
     sources: {
-      'raster-tiles': {
+      osm: {
         type: 'raster',
         tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
         tileSize: 256,
@@ -31,9 +32,9 @@ export default new maplibreGl.Map({
     },
     layers: [
       {
-        id: 'simple-tiles',
+        id: 'osm-map',
         type: 'raster',
-        source: 'raster-tiles',
+        source: 'osm',
         minzoom: 0,
         maxzoom: 22,
       },

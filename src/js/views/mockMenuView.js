@@ -1,15 +1,5 @@
 class MockMenuView {
-  _parentElement = document.getElementById('menu');
-  //   btn = this._element.querySelector('.btn-load');
-
-  // test
-  // addHoverHandler() {
-  //   this._parentElement.addEventListener('mouseover', function (e) {
-  //     const btn = e.target.closest('.btn--load');
-  //     if (!btn) return;
-  //     console.log('Load hovering');
-  //   });
-  // }
+  _parentElement = document.querySelector('.menu');
 
   addHandlerButtonLoad(handler) {
     this._parentElement.addEventListener('click', function (e) {
