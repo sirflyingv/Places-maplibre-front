@@ -25,9 +25,8 @@ body {
   width: 150px;
   height: auto;
   padding: 5px;
-  /* box-shadow: inset 0px 0px 5px 3px rgba(165, 165, 165, 0.15); */
 }
-.menu--container {
+.menu__container {
   margin: 2px;
   display: grid;
   justify-content: center;
@@ -39,15 +38,12 @@ body {
 .btn {
   width: auto;
   height: 24px;
-  /* margin: 2px; */
   border-radius: 5px;
   border: 0;
   background-color: rgb(230, 230, 230);
   color: var(--menu-text-color);
   opacity: 0.9;
   box-shadow: inset 0px 0px 5px 3px rgba(165, 165, 165, 0.2);
-  /* font-family: 'Roboto', sans-serif; */
-  /* font-weight: 600; */
   vertical-align: middle;
   font-size: 12px;
 }
@@ -59,7 +55,6 @@ body {
 
 .btn:active {
   background-color: rgb(210, 210, 210);
-  /* box-shadow: inset 2px 2px 5px 3px rgba(200, 200, 200, 0.2); */
 }
 
 .input__global-query {
@@ -102,7 +97,7 @@ body {
   backdrop-filter: blur(2px) saturate(50%);
 }
 
-.place-marker--info {
+.place_marker--info {
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto, auto;
@@ -128,7 +123,6 @@ body {
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 2px;
-  /* border-radius: 5px; */
   font-size: small;
   font-family: Helvetica, sans-serif;
   height: 34px;
@@ -143,45 +137,6 @@ body {
   font-size: 12px;
   font-weight: 600;
   padding: 2px 4px 2px 4px;
-  /* margin-left: 1px; */
-  height: auto;
-  box-shadow: inset 0px 0px 2px 2px rgba(165, 165, 165, 0.15);
-}
-
-.place_marker--tags-expand {
-  color: var(--menu-text-color);
-  font-size: 12px;
-  font-weight: 600;
-  font-family: Helvetica, sans-serif;
-  /* align-self: flex-end; */
-
-  line-height: 12px;
-  background-color: rgb(211, 182, 88);
-  border-radius: 3px;
-  color: var(--menu-text-color);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 4px 2px 4px;
-
-  height: auto;
-  box-shadow: inset 0px 0px 2px 2px rgba(165, 165, 165, 0.15);
-}
-
-.place_marker--tags-hide {
-  color: var(--menu-text-color);
-  font-size: 12px;
-  font-weight: 600;
-  font-family: Helvetica, sans-serif;
-  /* align-self: flex-end; */
-
-  line-height: 12px;
-  background-color: rgb(211, 182, 88);
-  border-radius: 3px;
-  color: var(--menu-text-color);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 4px 2px 4px;
-
   height: auto;
   box-shadow: inset 0px 0px 2px 2px rgba(165, 165, 165, 0.15);
 }
@@ -193,13 +148,6 @@ body {
   max-height: 100%;
   max-width: 100%;
   border-radius: 10px;
-}
-
-.place_marker--tags-expand:hover {
-  cursor: context-menu;
-}
-.place_marker--tags-hide:hover {
-  cursor: context-menu;
 }
 
 .hidden {

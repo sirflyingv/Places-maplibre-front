@@ -21,7 +21,7 @@ export const createCustomPlaceMarker = function (place, img) {
       }
     }
     if (!allTagsFit)
-      limitedTags += '<span class="place_marker--tags-expand">...</span>';
+      limitedTags += '<span class="place_marker--tags-tag">...</span>';
 
     return limitedTags;
   };
@@ -33,7 +33,7 @@ export const createCustomPlaceMarker = function (place, img) {
         class="place_marker--image"
         src=${img}
     />
-    <div class="place-marker--info">
+    <div class="place_marker--info">
     <div class="place_marker--name">
         ${place.name}
     </div>
