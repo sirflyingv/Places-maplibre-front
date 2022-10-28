@@ -1,6 +1,7 @@
 import maplibreGl, { LngLat } from 'maplibre-gl';
 import { searchStringCleaner } from './helpers';
 import { point, featureCollection } from '@turf/helpers';
+import { distance } from '@turf/turf';
 import { map } from './views/mapView';
 import mockMenuView from './views/mockMenuView';
 import { createCustomPlaceMarker } from './views/placeMarkerView';
@@ -10,8 +11,8 @@ import {
   loadPlaces,
   clearLoadedPlaces,
   getPlacesBbox,
+  loadOnDrag,
 } from './model';
-// import { API_URL } from './config';
 
 map.addControl(new maplibreGl.NavigationControl());
 
@@ -20,13 +21,19 @@ const addMarker = function (place) {
     place,
     'https://www.sirflyingv.info/test/img_sample.png'
   );
-
   const marker = new maplibreGl.Marker({
     element: htmlMarker,
     offset: [70, 0],
   })
     .setLngLat(place.location.coordinates)
     .addTo(map);
+
+  // fix for long img load
+  const addedMarkerEl = marker.getElement();
+  const imgEl = addedMarkerEl.querySelector('.place_marker--image');
+  imgEl.addEventListener('load', function () {
+    addedMarkerEl.classList.remove('hidden');
+  });
 
   saveMarker(marker);
 };
@@ -98,6 +105,46 @@ map.on('load', async function () {
   renderMarkers();
 });
 
+// DISCOVER MODE - shieeet don't do it this way
+// const toggleDiscoverMode = function (btn) {
+//   state.discoverMode = !state.discoverMode;
+//   if (state.discoverMode) btn.textContent = 'Discover:ON';
+//   if (!state.discoverMode) btn.textContent = 'Discover';
+// };
+
+// map.on('move', async function () {
+//   const { lng, lat } = map.getCenter();
+//   const viewCenter = point([lng, lat]);
+//   // console.log(viewCenter);
+
+//   state.loadedPlaces.forEach((place, i) => {
+//     const placeCenter = point(place.location.coordinates);
+//     const distanceViewToPlace = distance(placeCenter, viewCenter, {
+//       units: 'kilometers',
+//     });
+
+//     if (distanceViewToPlace > 20) {
+//       state.loadedPlaces.splice(i, 1);
+//       state.markers[i].remove();
+//       state.markers.splice(i, 1);
+//     }
+//   });
+//   if (!state.discoverMode) return;
+//   if (map.getZoom() < 9) return;
+
+//   const loadedOnDragPlaces = await loadOnDrag(map);
+//   loadedOnDragPlaces.forEach((place) => {
+//     if (state.placesIdsArray().includes(place.id)) return;
+//     // console.log(place.name + ' is already loaded');
+//     if (!state.placesIdsArray().includes(place.id)) {
+//       state.loadedPlaces.push(place);
+//       // console.log(place.name + ' is new one! 😎');
+//       addMarker(place);
+//     }
+//   });
+//   // console.log(state.loadedPlaces, state.markers);
+// });
+
 // Just helper function
 const getViewCenterString = function () {
   const { lng, lat } = map.getCenter();
@@ -108,19 +155,4 @@ const getViewCenterString = function () {
 
 mockMenuView.addHandlerButtonLoad(findAndShowPlaces);
 mockMenuView.addHandlerButtonRemove(removeBtnHandler);
-
-// test
-// mockMenuView.addHoverHandler();
-
-// const addSimpleMarker = function (place) {
-//   const marker = new maplibreGl.Marker()
-//     .setLngLat(place.location.coordinates)
-//     .addTo(map);
-//   saveMarker(marker);
-// };
-
-// unused for now
-// const centerMapViewTo = function (viewCenterString) {
-//   const [lng, lat, zoom] = viewCenterString.split(',');
-//   map.setCenter([lng, lat]).setZoom(zoom);
-// };
+// mockMenuView.addHandlerDiscoverButton(toggleDiscoverMode);

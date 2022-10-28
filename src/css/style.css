@@ -150,6 +150,15 @@ body {
   border-radius: 10px;
 }
 
+/* .menu-discover {
+  top: 80px;
+  z-index: 3;
+}
+
+.btn--discover {
+  width: 100%;
+} */
+
 .hidden {
   display: none;
 }

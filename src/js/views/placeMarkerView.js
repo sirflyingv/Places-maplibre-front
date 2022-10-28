@@ -1,6 +1,6 @@
 export const createCustomPlaceMarker = function (place, img) {
   const htmlMarker = document.createElement('div');
-  htmlMarker.classList.add('place_marker');
+  htmlMarker.classList.add('place_marker', 'hidden');
 
   // 33 symbols
   const tagsArr = place.tagsString;
@@ -40,6 +40,12 @@ export const createCustomPlaceMarker = function (place, img) {
     <div class="place_marker--tags">${getLimitedTags()}</div>
     </div>`
   );
+  // const imgEl = htmlMarker.querySelector('.place_marker--image');
+
+  // imgEl.addEventListener('load', function () {
+  //   htmlMarker.classList.remove('.hidden');
+  // });
+  // console.log(imgEl);
 
   return htmlMarker;
 };

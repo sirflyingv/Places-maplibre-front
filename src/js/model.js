@@ -4,6 +4,7 @@ import { bbox } from '@turf/turf';
 import { multiPoint } from '@turf/helpers';
 
 export const state = {
+  discoverMode: false,
   markers: [],
   loadedPlaces: [],
   // mapViewState: {
@@ -27,10 +28,24 @@ export const state = {
   // showNames() {
   //   return this.loadedPlaces.map((place) => place.name).join(',');
   // },
+  placesIdsArray() {
+    return this.loadedPlaces.map((place) => place.id);
+  },
 };
 
 export const saveMarker = function (m) {
   state.markers.push(m);
+};
+
+export const loadOnDrag = async function (map, distance = 20000) {
+  const { lng, lat } = map.getCenter();
+
+  // console.log(lng, lat);
+  const viewAreaString = `${lng},${lat},${distance}`;
+  const res = await AJAX(
+    `${API_URL}/api/v1/places//discovery-mode/${viewAreaString}`
+  );
+  return res.data.places;
 };
 
 export const loadPlaces = async function (queryWords) {
