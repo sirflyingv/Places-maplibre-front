@@ -18,21 +18,6 @@ console.log(navigator.userAgent);
 
 map.addControl(new maplibreGl.NavigationControl());
 
-map.on('load', () => {
-  map.addSource('amazon-terrain', {
-    tiles: [
-      'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
-    ],
-    tileSize: 256,
-    type: 'raster-dem',
-    encoding: 'terrarium',
-  });
-  map.setTerrain({
-    source: 'amazon-terrain',
-    exaggeration: 1,
-  });
-});
-
 const addMarker = function (place) {
   const htmlMarker = createCustomPlaceMarker(
     place,

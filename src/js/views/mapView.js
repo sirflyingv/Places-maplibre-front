@@ -1,4 +1,5 @@
 import maplibreGl from 'maplibre-gl';
+import { styleMT } from '../../map_data/outdoor-MapTiler';
 
 const [searchString, coords] = window.location.hash.split('&');
 
@@ -18,8 +19,11 @@ const startView = {
 
 export const map = new maplibreGl.Map({
   container: 'map', // container id
+  antialias: true,
   style:
-    'https://api.maptiler.com/maps/outdoor/style.json?key=3eXZ5tYBKESvX6pgBzUi',
+    // 'https://api.maptiler.com/maps/outdoor/style.json?key=3eXZ5tYBKESvX6pgBzUi',
+    // '../../map_data/outdoor-MapTiler.json',
+    JSON.parse(styleMT),
   // {
   //   version: 8,
   //   // glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
@@ -46,9 +50,24 @@ export const map = new maplibreGl.Map({
   zoom: startView.zoom, // starting zoom
 });
 
-map.addControl(
-  new maplibreGl.TerrainControl({
-    source: 'amazon-terrain',
-    exaggeration: 1,
-  })
-);
+// map.on('load', () => {
+//   map.addSource('amazon-terrain', {
+//     tiles: [
+//       'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+//     ],
+//     tileSize: 512,
+//     type: 'raster-dem',
+//     encoding: 'terrarium',
+//   });
+//   map.setTerrain({
+//     source: 'amazon-terrain',
+//     exaggeration: 1,
+//   });
+// });
+
+// map.addControl(
+//   new maplibreGl.TerrainControl({
+//     source: 'amazon-terrain',
+//     exaggeration: 1,
+//   })
+// );
