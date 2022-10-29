@@ -33,7 +33,7 @@ export const createCustomPlaceMarker = function (place, img) {
         class="place_marker--image"
         src=${img}
     />
-    <div class="place_marker--info">
+    <div class="place_marker--info">z
     <div class="place_marker--name">
         ${place.name}
     </div>
