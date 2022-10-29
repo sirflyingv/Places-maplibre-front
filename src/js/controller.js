@@ -14,6 +14,8 @@ import {
   loadOnDrag,
 } from './model';
 
+console.log(navigator.userAgent);
+
 map.addControl(new maplibreGl.NavigationControl());
 
 const addMarker = function (place) {

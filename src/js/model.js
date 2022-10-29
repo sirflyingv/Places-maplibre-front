@@ -1,5 +1,5 @@
 import { AJAX } from './helpers';
-import { API_URL } from './config';
+import { API_URL } from '../../config';
 import { bbox } from '@turf/turf';
 import { multiPoint } from '@turf/helpers';
 

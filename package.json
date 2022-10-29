@@ -4,7 +4,7 @@
   "description": "frontend for places project to work with places API",
   "scripts": {
     "start": "parcel ./src/html/index.html",
-    "build": "parcel build index.html --dist-dir ./dist"
+    "build": "parcel build ./src/html/index.html --dist-dir ./dist"
   },
   "author": "sirflyingv",
   "license": "ISC",
