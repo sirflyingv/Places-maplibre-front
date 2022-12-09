@@ -16,14 +16,14 @@ export const styleMT = JSON.stringify({
       tileSize: 512,
       type: 'raster-dem',
     },
-    // 'amazon-terrain': {
-    //   tiles: [
-    //     'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
-    //   ],
-    //   tileSize: 512,
-    //   type: 'raster-dem',
-    //   encoding: 'terrarium',
-    // },
+    'amazon-terrain': {
+      tiles: [
+        'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+      ],
+      tileSize: 512,
+      type: 'raster-dem',
+      encoding: 'terrarium',
+    },
     maptiler_planet: {
       url: 'https://api.maptiler.com/tiles/v3/tiles.json?key=3eXZ5tYBKESvX6pgBzUi',
       type: 'vector',
@@ -4381,10 +4381,10 @@ export const styleMT = JSON.stringify({
       filter: ['all', ['==', 'class', 'continent']],
     },
   ],
-  // terrain: {
-  //   source: 'amazon-terrain',
-  //   exaggeration: 1,
-  // },
+  terrain: {
+    source: 'amazon-terrain',
+    exaggeration: 1,
+  },
   metadata: {
     'maptiler:copyright':
       'This style was generated on MapTiler Cloud. Usage outside of MapTiler Cloud requires valid MapTiler Data Package: https://www.maptiler.com/data/package/ -- please contact us.',

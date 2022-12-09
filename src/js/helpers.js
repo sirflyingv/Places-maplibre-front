@@ -8,11 +8,7 @@ export const timeout = function (s) {
   });
 };
 
-export const AJAX = async function (
-  url,
-  method = 'GET',
-  uploadData = undefined
-) {
+export const AJAX = async function (url, method = 'GET', uploadData = undefined) {
   try {
     const fetchPro = uploadData
       ? fetch(url, {
@@ -34,6 +30,7 @@ export const AJAX = async function (
   }
 };
 
+// some tricky things can happen with this symbols inh query string!
 export const searchStringCleaner = function (string) {
   return string.replace(/[# ]/g, '');
 };

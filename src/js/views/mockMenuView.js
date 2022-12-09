@@ -2,9 +2,9 @@ class MockMenuView {
   _parentElement = document.querySelector('.menu');
   _discoverParentElement = document.querySelector('.menu-discover');
 
-  addHandlerButtonLoad(handler) {
+  addHandlerButtonFind(handler) {
     this._parentElement.addEventListener('click', function (e) {
-      const btn = e.target.closest('.btn--load');
+      const btn = e.target.closest('.btn--find');
       if (!btn) return;
       handler();
     });
@@ -19,9 +19,7 @@ class MockMenuView {
   }
 
   getSearchInput() {
-    const query = this._parentElement.querySelector(
-      '.input__global-query'
-    ).value;
+    const query = this._parentElement.querySelector('.input__global-query').value;
     this._clearInput();
     return query;
   }
@@ -29,14 +27,6 @@ class MockMenuView {
   _clearInput() {
     this._parentElement.querySelector('.input__global-query').value = '';
   }
-
-  // addHandlerDiscoverButton(handler) {
-  //   this._discoverParentElement.addEventListener('click', function (e) {
-  //     const btn = e.target.closest('.btn--discover');
-  //     if (!btn) return;
-  //     handler(btn);
-  //   });
-  // }
 }
 
 export default new MockMenuView();

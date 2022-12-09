@@ -3,54 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <title>Places</title>
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
-
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script defer type="module" src="../js/controller.js"></script>
-    <link
-      href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css"
-      rel="stylesheet"
-    />
-
+    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet" />
     <link href="../css/style.css" rel="stylesheet" />
+    <link href="../css/marker.css" rel="stylesheet" />
   </head>
   <body>
     <div class="menu">
       <div class="menu__container">
-        <button class="btn btn--load">Load</button>
+        <button class="btn btn--find">Find</button>
         <button class="btn btn--remove">Remove</button>
-        <input
-          class="input__global-query"
-          type="text"
-          placeholder="global search"
-        />
+        <input class="input__global-query" type="text" placeholder="global search" />
       </div>
     </div>
-    <!-- <div class="menu menu-discover">
-      <button class="btn btn--discover">Discover</button>
-    </div> -->
-
-    <!-- <div class="place_marker">
-      <img
-        alt="place"
-        class="place_marker--image"
-        src="../img/img_sample.png"
-      />
-      <div class="place-marker--info">
-        <div class="place_marker--name">Escuela de Surfadfrbw</div>
-        <div class="place_marker--tags test_tag_box">
-          <div class="place_marker--tags-tag">nature</div>
-          <div class="place_marker--tags-tag">outdooe</div>
-          <div class="place_marker--tags-tag">sea</div>
-          <div class="place_marker--tags-tag">culture</div>
-          <div class="place_marker--tags-tag">music</div>
-          <div class="place_marker--tags-tag">architecture</div>
-          <div class="place_marker--tags-tag">living</div>
-        </div>
-      </div>
-    </div> -->
     <div id="map"></div>
   </body>
 </html>

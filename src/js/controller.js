@@ -1,34 +1,23 @@
-import maplibreGl, { LngLat } from 'maplibre-gl';
+import maplibreGl from '../../test-maplibre/maplibre-gl-dev';
 import { searchStringCleaner } from './helpers';
-import { point, featureCollection } from '@turf/helpers';
-import { distance } from '@turf/turf';
 import { map } from './views/mapView';
 import mockMenuView from './views/mockMenuView';
 import { createCustomPlaceMarker } from './views/placeMarkerView';
-import {
-  state,
-  saveMarker,
-  loadPlaces,
-  clearLoadedPlaces,
-  getPlacesBbox,
-  loadOnDrag,
-} from './model';
-
-console.log(navigator.userAgent);
+import { state, saveMarkerToState, loadPlaces, clearLoadedPlaces, getPlacesBbox } from './model';
 
 map.addControl(new maplibreGl.NavigationControl());
 
-const addMarker = function (place) {
-  const htmlMarker = createCustomPlaceMarker(
-    place,
-    'https://www.sirflyingv.info/test/img_sample.png'
-  );
+const addMarker = (place) => {
+  const markerData = createCustomPlaceMarker(place);
+
   const marker = new maplibreGl.Marker({
-    element: htmlMarker,
-    offset: [70, 0],
+    element: markerData.htmlEl,
+    offset: markerData.offset,
   })
     .setLngLat(place.location.coordinates)
     .addTo(map);
+
+  saveMarkerToState(marker);
 
   // fix for long img load
   const addedMarkerEl = marker.getElement();
@@ -36,116 +25,37 @@ const addMarker = function (place) {
   imgEl.addEventListener('load', function () {
     addedMarkerEl.classList.remove('hidden');
   });
-
-  saveMarker(marker);
-};
-
-const removeBtnHandler = function () {
-  clearLoadedPlaces(); // model.state update
-  const [searchString, mapViewString] = window.location.hash.split('&');
-  window.location.hash = mapViewString ? `&${mapViewString}` : '';
-};
-
-const findAndShowPlaces = async function (query) {
-  // querying places and getting cleanQueryString
-  const cleanQueryString = await getQueryAndLoadPlaces(query); // model.state updated
-  if (!cleanQueryString) return;
-
-  renderMarkers();
-  fitViewtoMarkers();
-  const [searchString, mapViewString] = window.location.hash.split('&');
-  window.location.hash = `${cleanQueryString}&${
-    mapViewString ? mapViewString : ''
-  }`;
-};
-
-const getQueryAndLoadPlaces = async function (query) {
-  const queryString = query ? query : mockMenuView.getSearchInput();
-  if (queryString.length < 3) return;
-  // clean query TO DO - BETTER CLEANING
-  const cleanQueryString = searchStringCleaner(queryString);
-
-  clearLoadedPlaces(); // model.state updated
-  await loadPlaces(cleanQueryString); // model.state updated
-  return cleanQueryString;
 };
 
 const renderMarkers = function () {
   if (state.loadedPlaces.length === 0) return;
-
-  // Avoiding split-pixel movement blurry render
-  state.markers.forEach((m) => m.remove());
 
   state.loadedPlaces.forEach((place) => {
     addMarker(place);
   });
 };
 
+const updateMarkers = async (searchString) => {
+  clearLoadedPlaces(); // model.state updated
+  await loadPlaces(searchString); // model.state updated
+  renderMarkers();
+};
+
 const fitViewtoMarkers = function () {
   if (state.loadedPlaces.length === 0) return;
   map.fitBounds(getPlacesBbox(state.loadedPlaces), {
-    padding: 100,
+    padding: 200,
     maxZoom: 14,
     // linear: true,
   });
 };
 
-map.on('moveend', function () {
-  const viewCenterString = getViewCenterString();
-
-  const [searchString, oldMapViewString] = window.location.hash.split('&');
-  window.location.hash = `${searchString}&${viewCenterString}`;
-  // renderMarkers();
-  // console.log(state);
-});
-
 map.on('load', async function () {
-  const [searchString, oldMapViewString] = window.location.hash.split('&');
-  const cleanSearchString = searchStringCleaner(searchString);
-
-  await getQueryAndLoadPlaces(cleanSearchString);
-  renderMarkers();
+  const searchString = window.location.hash.split('&').at(0);
+  const cleanQueryString = searchStringCleaner(searchString);
+  if (cleanQueryString.length < 3) return;
+  await updateMarkers(cleanQueryString);
 });
-
-// DISCOVER MODE - shieeet don't do it this way
-// const toggleDiscoverMode = function (btn) {
-//   state.discoverMode = !state.discoverMode;
-//   if (state.discoverMode) btn.textContent = 'Discover:ON';
-//   if (!state.discoverMode) btn.textContent = 'Discover';
-// };
-
-// map.on('move', async function () {
-//   const { lng, lat } = map.getCenter();
-//   const viewCenter = point([lng, lat]);
-//   // console.log(viewCenter);
-
-//   state.loadedPlaces.forEach((place, i) => {
-//     const placeCenter = point(place.location.coordinates);
-//     const distanceViewToPlace = distance(placeCenter, viewCenter, {
-//       units: 'kilometers',
-//     });
-
-//     if (distanceViewToPlace > 20) {
-//       state.loadedPlaces.splice(i, 1);
-//       state.markers[i].remove();
-//       state.markers.splice(i, 1);
-//     }
-//   });
-//   if (!state.discoverMode) return;
-//   if (map.getZoom() < 9) return;
-
-//   const loadedOnDragPlaces = await loadOnDrag(map);
-//   loadedOnDragPlaces.forEach((place) => {
-//     if (state.placesIdsArray().includes(place.id)) return;
-//     // console.log(place.name + ' is already loaded');
-//     if (!state.placesIdsArray().includes(place.id)) {
-//       state.loadedPlaces.push(place);
-//       // console.log(place.name + ' is new one! 😎');
-//       addMarker(place);
-//     }
-//   });
-//   // console.log(state.loadedPlaces, state.markers);
-// });
 
 // Just helper function
 const getViewCenterString = function () {
@@ -155,6 +65,30 @@ const getViewCenterString = function () {
   return viewCenterString;
 };
 
-mockMenuView.addHandlerButtonLoad(findAndShowPlaces);
+map.on('moveend', function () {
+  const viewCenterString = getViewCenterString();
+  const searchString = window.location.hash.split('&').at(0);
+  window.location.hash = `${searchString}&${viewCenterString}`;
+});
+
+const findBtnHandler = async function () {
+  const searchInput = mockMenuView.getSearchInput();
+  if (searchInput.length < 3) return;
+  // clean query TO DO - BETTER CLEANING
+  const cleanQueryString = searchStringCleaner(searchInput);
+
+  await updateMarkers(cleanQueryString); // model.state updated
+  fitViewtoMarkers();
+
+  const mapViewString = window.location.hash.split('&').at(-1);
+  window.location.hash = `${cleanQueryString}&${mapViewString ? mapViewString : ''}`;
+};
+
+const removeBtnHandler = () => {
+  clearLoadedPlaces(); // model.state update
+  const mapViewString = window.location.hash.split('&').at(-1);
+  window.location.hash = mapViewString ? `&${mapViewString}` : '';
+};
+
+mockMenuView.addHandlerButtonFind(findBtnHandler);
 mockMenuView.addHandlerButtonRemove(removeBtnHandler);
-// mockMenuView.addHandlerDiscoverButton(toggleDiscoverMode);
